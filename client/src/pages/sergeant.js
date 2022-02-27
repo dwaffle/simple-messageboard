@@ -2,10 +2,9 @@ import React from "react";
 import {useState, useEffect} from 'react';
 import api from '../api'
 import './style.css'
-import {Button} from 'react-bootstrap'
-import { getDropdownMenuPlacement } from "react-bootstrap/esm/DropdownMenu";
+import {Button, Row, Col} from 'react-bootstrap'
 
-export default function GeneralBoard(){
+export default function SergeantBoard(){
 
     const [posts, setPosts] = useState([{}])
     
@@ -22,28 +21,24 @@ export default function GeneralBoard(){
 
     return(
         <> 
-            <h1 className="title">Boards</h1>
-                <table>
-                    <tbody>
-                    <tr>
-                        <th>
-                            General Discussion
-                        </th>
-                    </tr>
+        <Row>
+            <h1 className="title">Sergeant Discussion</h1>
+        </Row>
                         {posts && posts.map((item) => {
                             return(
-                            <tr>
-                                <tr>Subject</tr>
-                                <td>{item.subject}</td>
-                                <tr>Posted on {item.date}</tr>
-                                <tr>Body</tr>
-                                <td>{item.text}</td>
-                            </tr>
+                            <>
+                            <Col>
+                                <div className="subject">Subject: {item.subject}</div>
+                            </Col>
+                            <Col>
+                                <div className="text-header">Text:</div>
+                                <div className="body">{item.text}</div>
+                            </Col>
+                            <div />
+                            </>
                             )
                         })}
-                    
-                    </tbody>
-                </table>
+
                 
         </>
     )
