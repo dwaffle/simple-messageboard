@@ -1,26 +1,27 @@
 import { useState } from 'react';
 import { Form, Button, Row, Col } from 'react-bootstrap';
+import {useNavigate} from 'react-router-dom'
 // import { useRecoilState } from 'recoil';
-import { useHistory } from 'react-router';
-import api from '../../api';
-import './login.scss';
+import api from '../api';
 
-function LoginForm() {
-  const history = useHistory();
-  const [username, setUsername] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+
+export function LoginForm() {
+  const navigate = useNavigate()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
 
   function handleLogin(e) {
     e.preventDefault();
-    const loginRequest = { user_userName: username, user_password: password };
-    api.tokens.post(loginRequest);
-    api.login.post({ user_userName: username });
-    history.push('/articles');
+    const loginRequest = { username: username, password: password };
+    api.login.post(loginRequest).then((res) => {
+      console.log(res)
+    });
+    navigate('/boards')
   }
 
   return (
     <>
-   <div className = "bacGround">
+   <div className = "backGround">
 
   <Row> 
     <Col/>
@@ -81,5 +82,3 @@ function LoginForm() {
     </>
   );
 }
-
-export default LoginForm;

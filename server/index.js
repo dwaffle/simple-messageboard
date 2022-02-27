@@ -4,6 +4,7 @@ const app = express()
 const cors = require('cors')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
+const tokens = require('./models/token')
 require('dotenv').config()
 
 
@@ -15,7 +16,7 @@ app.use((req, res, next) => {
 app.use(cors())
 app.use(bodyParser.json())
 var mysql = require('mysql2')
-const { config } = require('dotenv')
+const { JsonWebTokenError } = require('jsonwebtoken')
 var connection = mysql.createConnection({
     host: process.env.WEBHOST,
     user: process.env.USER,
@@ -65,8 +66,10 @@ app.post("/signup", async (req, res) => {
     console.log(req.body)
     const body = req.body
     if(!(body.username && body.password)){
-            res.status(406).send({error: 406,
-                message: "Malformed request"})
+            res.status(406).send({
+                error: 406,
+                message: "Malformed request"
+            })
         } else {
             let password = await bcrypt.hash(body.password, 5)
             connection.query(`INSERT INTO user VALUES (default, ?, ?, 0)`, [body.username, password], function(err, results, fields){
@@ -81,6 +84,7 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", (req, res) => {
     const body = req.body
+    console.log(body)
     if(!(body.username && body.password)){
         res.status(406).send({
             error: 406,
@@ -100,8 +104,13 @@ app.post("/login", (req, res) => {
                     )
                 }
                 const validPassword = await bcrypt.compare(body.password, results[0].password)
+                
                 if(validPassword){
+                    
                     res.status(200).send({
+                        token: tokens.TokenModel.generateAccessToken({
+                            username: body.username
+                        }),
                         message: "Successful login will go here."
                     })
                 } else {
@@ -114,6 +123,7 @@ app.post("/login", (req, res) => {
         })
     }
 })
+
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)
