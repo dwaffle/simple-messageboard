@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import api from '../api'
 import './style.css'
 import {Button, Row, Col} from 'react-bootstrap'
+import PostingForm from "../components/postForm";
 
 export default function SergeantBoard(){
 
@@ -16,6 +17,12 @@ export default function SergeantBoard(){
             console.log(res.data)
 
         })
+    }, [])
+
+    const [hasToken, setToken] = useState('')
+    
+    useEffect(() => {
+        setToken(window.localStorage.getItem('token'))
     }, [])
     
 
@@ -38,7 +45,9 @@ export default function SergeantBoard(){
                             </>
                             )
                         })}
-
+                <Col>
+                        {hasToken && <PostingForm props={{board: 2}} />}
+              </Col>  
                 
         </>
     )

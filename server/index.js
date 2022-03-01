@@ -72,7 +72,7 @@ app.post("/signup", async (req, res) => {
             })
         } else {
             let password = await bcrypt.hash(body.password, 5)
-            connection.query(`INSERT INTO user VALUES (default, ?, ?, 0)`, [body.username, password], function(err, results, fields){
+            connection.query(`INSERT INTO user VALUES (default, ?, ?, 0, 0)`, [body.username, password], function(err, results, fields){
                 if(err){
                     throw err
                 } else {
@@ -129,7 +129,6 @@ app.post("/login", (req, res) => {
 
 app.post("/posts", authenticateToken.authenticateToken, (req, res) => {
     const post = req.body
-    console.log(post)
     connection.query('SELECT * FROM user WHERE username = ?', [post.username], async function(err, results, fields){
         if(err){
             throw err

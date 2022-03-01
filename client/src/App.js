@@ -4,6 +4,7 @@ import LoginPage from './pages/login'
 import ShowBoards from './pages/boards'
 import GeneralBoard from './pages/general'
 import SergeantBoard from "./pages/sergeant"
+import SignupPage from "./pages/signup"
 import logo from './logo.svg';
 import './App.css';
 
@@ -12,6 +13,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/general" element={<GeneralBoard />} />
         <Route path="/sergeant" element={<SergeantBoard />} />
