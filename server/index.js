@@ -5,6 +5,7 @@ const cors = require('cors')
 const bodyParser = require('body-parser')
 const bcrypt = require('bcrypt')
 const tokens = require('./models/token')
+const authenticateToken = require('./middleware/authenticator')
 require('dotenv').config()
 
 
@@ -63,7 +64,6 @@ app.get("/posts/:boardId", (req, res) => {
 })
 
 app.post("/signup", async (req, res) => {
-    console.log(req.body)
     const body = req.body
     if(!(body.username && body.password)){
             res.status(406).send({
@@ -84,24 +84,25 @@ app.post("/signup", async (req, res) => {
 
 app.post("/login", (req, res) => {
     const body = req.body
-    console.log(body)
-    if(!(body.username && body.password)){
+    if(!(body.username || body.password)){
         res.status(406).send({
             error: 406,
             message: "Malformed request"
         })
     } else {
         connection.query(`SELECT * FROM user WHERE username = ?`, [body.username], async function(err, results, fields){
+            
             if(err){
                 throw err
             } else {
-                if(!results){
+                if(!results[0]){
                     res.status(401).send(
                         {
                             error: 401,
                             message: "Username or password was incorrect."
                         }
                     )
+                    return;
                 }
                 const validPassword = await bcrypt.compare(body.password, results[0].password)
                 
@@ -109,9 +110,11 @@ app.post("/login", (req, res) => {
                     
                     res.status(200).send({
                         token: tokens.TokenModel.generateAccessToken({
-                            username: body.username
+                            username: body.username,
+                            isBanned: body.isBanned,
+                            isModerator: body.isModerator
                         }),
-                        message: "Successful login will go here."
+                        message: "Success"
                     })
                 } else {
                     res.status(401).send({
@@ -124,6 +127,13 @@ app.post("/login", (req, res) => {
     }
 })
 
+app.post("/post", authenticateToken.authenticateToken, (req, res) => {
+    const post = req.body
+    console.log(post)
+    res.status(200).send({
+        message: "Successfully posted to /post"
+    })
+})
 
 app.listen(PORT, () => {
     console.log(`Server listening on ${PORT}`)

@@ -12,7 +12,7 @@ const TokenModel = {
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, ( err, payload ) => {
             
             if( err ){
-                onError(err);
+                console.error(err);
                 return;
             }
 

@@ -2,12 +2,7 @@ import axios from 'axios'
 
 export default {
     get: async () => {
-        return axios.get(`http://localhost:3001/user`, {
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json'
-            }
-        })
+        return axios.get(`http://localhost:3001/user`)
     },
 
     post: async(body) => {

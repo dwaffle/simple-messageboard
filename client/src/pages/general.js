@@ -3,6 +3,7 @@ import {useState, useEffect} from 'react';
 import api from '../api'
 import './style.css'
 import {Button, Row, Col} from 'react-bootstrap'
+import PostingForm from "../components/postForm";
 
 export default function SergeantBoard(){
 
@@ -17,7 +18,7 @@ export default function SergeantBoard(){
 
         })
     }, [])
-    
+    //TODO: Add in validation to make sure the user is logged in before showing the posting form.
 
     return(
         <> 
@@ -34,7 +35,9 @@ export default function SergeantBoard(){
                             )
                         })}
 
-                
+              <Col>
+                        <PostingForm />
+              </Col>  
         </>
     )
 }
