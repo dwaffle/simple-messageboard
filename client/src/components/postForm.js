@@ -4,7 +4,7 @@ import api from '../api'
 import { Form, Button, Row, Col } from "react-bootstrap";
 import jwt_decode from 'jwt-decode'
 
-export default function PostingForm(){
+export default function PostingForm(props = {}){
 
     //Get username from the JWT token
     const [token, setToken] = useState('')
@@ -22,6 +22,7 @@ export default function PostingForm(){
     function handlePost(e) {
         e.preventDefault();
         const postRequest = { 
+            board: props.props.board,
             username: username,
             subject: subject,
             body: body
@@ -29,18 +30,18 @@ export default function PostingForm(){
         if(!subject || !body){
             alert("You must have a subject and a body to post.")
         } else {
-            api.posts.post(postRequest).then((res) => {
-            console.log(res)
-            });
+            api.posts.post(postRequest)
         } 
     }
     
     return(
         <> 
             <Form>
-                <Form.Group className="PostingForm">
+                <Form.Group className="posting-form">
                     <Row>
-                        Posting as {username}
+                        <Row>
+                            Posting as {username}
+                        </Row>
                     </Row>                    
                     <Row>
                         <Form.Label>Subject:</Form.Label>

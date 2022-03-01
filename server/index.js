@@ -127,11 +127,24 @@ app.post("/login", (req, res) => {
     }
 })
 
-app.post("/post", authenticateToken.authenticateToken, (req, res) => {
+app.post("/posts", authenticateToken.authenticateToken, (req, res) => {
     const post = req.body
     console.log(post)
-    res.status(200).send({
-        message: "Successfully posted to /post"
+    connection.query('SELECT * FROM user WHERE username = ?', [post.username], async function(err, results, fields){
+        if(err){
+            throw err
+        } else {
+            console.log(results)
+            connection.query('INSERT INTO post VALUES (default, ?, ?, now(), ?, ?)', [post.subject, post.body, results[0].id, post.board], async function (err){
+                if(err){
+                    throw err
+                } else {
+                    res.status(201).send({
+                        message: "Created"
+                    })
+                }
+            })
+        }
     })
 })
 
