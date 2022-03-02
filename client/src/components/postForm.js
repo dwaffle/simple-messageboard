@@ -30,7 +30,11 @@ export default function PostingForm(props = {}){
         if(!subject || !body){
             alert("You must have a subject and a body to post.")
         } else {
-            api.posts.post(postRequest)
+            try {
+                api.posts.post(postRequest)
+            } catch {
+                alert("Please log in again")
+            }
         } 
     }
     
