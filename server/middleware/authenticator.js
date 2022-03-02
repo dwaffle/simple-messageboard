@@ -15,7 +15,6 @@ function authenticateToken( request, response, next){
 
     const token = authorizationHeader.split(" ").pop()
     jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, ( err, payload ) => {
-        
         if( err ){
             response.status(401).send({
                 error: 401,

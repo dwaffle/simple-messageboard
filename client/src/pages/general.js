@@ -32,13 +32,17 @@ export default function GeneralBoard(){
                 return;
               }
             setToken(decoded)
-            console.log(decoded)
         }
     }, [])
 
-    function handleDelete(post){
-        const q = "q"
-    }
+         function handleDelete(idno){
+             return function deleter(){
+                 let id = {
+                     id: idno
+                 }
+                api.posts.patch(id)
+            }
+        }
 
     
 
@@ -48,16 +52,26 @@ export default function GeneralBoard(){
             <h1 className="title">General Discussion</h1>
         </Row>
                         {posts && posts.map((item) => {
+                            if(item.isDeleted === 0){
                             return(
                             <>
                             <hr></hr>
                                 <div className="subject">Subject: {item.subject}</div>
                                 <div className="text-header">Text:</div>
                                 <div className="body">{item.text}</div>
-                                {hasToken.isModerator && <Button variant="warning" className="delete-btn" onClick={handleDelete} >Delete Post</Button>}
+                                {(hasToken && hasToken.context.isModerator) && <Button variant="danger" className="delete-btn" onClick={handleDelete(item.id)} >Delete Post</Button>}
                             </>
                             )
-                        })}
+                        } else return (<><hr></hr>[DELETED]</>)
+                    }
+                        )
+                    
+                    
+                    
+                    
+                    
+                    
+                    }
 
               <Col>
                         {hasToken ? <PostingForm props={{board: 1}} /> : <><Button href="/signup">Sign up</Button><div><Button href="/login">Login</Button></div></>}

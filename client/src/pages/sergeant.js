@@ -2,6 +2,7 @@ import React from "react";
 import {useState, useEffect} from 'react';
 import api from '../api'
 import './style.css'
+import jwtDecode from "jwt-decode";
 import {Button, Row, Col} from 'react-bootstrap'
 import PostingForm from "../components/postForm";
 
@@ -20,9 +21,20 @@ export default function SergeantBoard(){
     }, [])
 
     const [hasToken, setToken] = useState('')
-    
+
     useEffect(() => {
-        setToken(window.localStorage.getItem('token'))
+        
+        const token = window.localStorage.getItem('token')
+        if(token){
+            
+            const decoded = jwtDecode(token)
+            if (Date.now() >= decoded.exp * 1000) {
+                localStorage.clear();
+                return;
+              }
+            setToken(decoded)
+            console.log(decoded)
+        }
     }, [])
     
 

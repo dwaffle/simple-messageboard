@@ -36,7 +36,6 @@ app.get("/user", (req, res) => {
         if(err){
             throw err
         } else {
-            console.log(results);
             res.status(200).send(results);
         }
     })
@@ -107,12 +106,13 @@ app.post("/login", (req, res) => {
                 const validPassword = await bcrypt.compare(body.password, results[0].password)
                 
                 if(validPassword){
-                    
                     res.status(200).send({
                         token: tokens.TokenModel.generateAccessToken({
                             username: body.username,
-                            isBanned: body.isBanned,
-                            isModerator: body.isModerator
+                            context: {
+                                isBanned: results[0].isBanned,
+                                isModerator: results[0].isModerator
+                            }
                         }),
                         message: "Success"
                     })
@@ -133,8 +133,7 @@ app.post("/posts", authenticateToken.authenticateToken, (req, res) => {
         if(err){
             throw err
         } else {
-            console.log(results)
-            connection.query('INSERT INTO post VALUES (default, ?, ?, now(), ?, ?)', [post.subject, post.body, results[0].id, post.board], async function (err){
+            connection.query('INSERT INTO post VALUES (default, ?, ?, now(), ?, ?, default)', [post.subject, post.body, results[0].id, post.board], async function (err){
                 if(err){
                     throw err
                 } else {
@@ -142,6 +141,19 @@ app.post("/posts", authenticateToken.authenticateToken, (req, res) => {
                         message: "Created"
                     })
                 }
+            })
+        }
+    })
+})
+
+app.patch("/posts", authenticateToken.authenticateToken, (req, res) => {
+    const post = req.body
+    connection.query('UPDATE post SET isDeleted = 1 WHERE id = ?', [req.body.id], function(err){
+        if(err){
+            throw err
+        } else {
+            res.status(200).send({
+                message: "Deleted"
             })
         }
     })
