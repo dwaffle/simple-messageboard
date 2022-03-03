@@ -55,7 +55,7 @@ export default function GeneralBoard(){
                             if(item.isDeleted === 0){
                             return(
                             <>
-                            <hr></hr>
+                            <hr />
                             <div className = "user" >Posted by: {item.username}</div>
                                 <div className="subject">Subject: {item.subject}</div>
                                 <div className="text-header">Text:</div>

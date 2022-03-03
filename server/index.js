@@ -17,14 +17,20 @@ app.use((req, res, next) => {
 app.use(cors())
 app.use(bodyParser.json())
 var mysql = require('mysql2')
-const { JsonWebTokenError } = require('jsonwebtoken')
-var connection = mysql.createConnection({
+// var connection = mysql.createConnection({
+//     host: process.env.WEBHOST,
+//     user: process.env.USER,
+//     password: process.env.PASSWORD,
+//     database: process.env.DATABASE
+// })
+var pool = mysql.createPool({
+    connectionLimit: 10,
     host: process.env.WEBHOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE
 })
-connection.connect()
+
 
 
 app.get("/api", (req, res) => {
@@ -32,33 +38,42 @@ app.get("/api", (req, res) => {
 })
 
 app.get("/user", (req, res) => {
-    connection.query('SELECT * FROM user', function(err, results, fields){
-        if(err){
-            throw err
-        } else {
-            res.status(200).send(results);
-        }
+    pool.getConnection(function(err, connection){
+        connection.query('SELECT * FROM user', function(err, results, fields){
+            if(err){
+                throw err
+            } else {
+                res.status(200).send(results);
+            }
+        })
+        connection.release()
     })
 })
 
 app.get("/boards", (req, res) => {
-    connection.query('SELECT * FROM board', function(err, results, fields){
-        if(err){
-            throw err
-        } else {
-            console.log(results);
-            res.status(200).send(results)
-        }
+    pool.getConnection(function(err, connection){
+        connection.query('SELECT * FROM board', function(err, results, fields){
+            if(err){
+                throw err
+            } else {
+                console.log(results);
+                res.status(200).send(results)
+            }
+        })
+        connection.release()
     })
 })
 
 app.get("/posts/:boardId", (req, res) => {
-    connection.query(`SELECT p.id, subject, text, date, user_id, board_id, isDeleted, u.username FROM post p JOIN user u ON p.user_id = u.id WHERE board_id = ${req.params.boardId}`, function(err, results, fields){
-        if(err){
-            throw err
-        } else {
-            res.status(200).send(results)
-        }
+    pool.getConnection(function(err, connection){
+        connection.query(`SELECT p.id, subject, text, date, user_id, board_id, isDeleted, u.username FROM post p JOIN user u ON p.user_id = u.id WHERE board_id = ${req.params.boardId}`, function(err, results, fields){
+            if(err){
+                throw err
+            } else {
+                res.status(200).send(results)
+            }
+        })
+        connection.release()
     })
 })
 
@@ -71,12 +86,15 @@ app.post("/signup", async (req, res) => {
             })
         } else {
             let password = await bcrypt.hash(body.password, 5)
-            connection.query(`INSERT INTO user VALUES (default, ?, ?, 0, 0)`, [body.username, password], function(err, results, fields){
-                if(err){
-                    throw err
-                } else {
-                    res.status(200).send()
-                }
+            pool.getConnection(function(err, connection){
+                connection.query(`INSERT INTO user VALUES (default, ?, ?, 0, 0)`, [body.username, password], function(err, results, fields){
+                    if(err){
+                        throw err
+                    } else {
+                        res.status(200).send()
+                    }
+                })
+                connection.release()
             })
         }
 })
@@ -89,73 +107,81 @@ app.post("/login", (req, res) => {
             message: "Malformed request"
         })
     } else {
-        connection.query(`SELECT * FROM user WHERE username = ?`, [body.username], async function(err, results, fields){
-            
-            if(err){
-                throw err
-            } else {
-                if(!results[0]){
-                    res.status(401).send(
-                        {
-                            error: 401,
-                            message: "Username or password was incorrect."
-                        }
-                    )
-                    return;
-                }
-                const validPassword = await bcrypt.compare(body.password, results[0].password)
+        pool.getConnection(function(err, connection){
+            connection.query(`SELECT * FROM user WHERE username = ?`, [body.username], async function(err, results, fields){
                 
-                if(validPassword){
-                    res.status(200).send({
-                        token: tokens.TokenModel.generateAccessToken({
-                            username: body.username,
-                            context: {
-                                isBanned: results[0].isBanned,
-                                isModerator: results[0].isModerator
-                            }
-                        }),
-                        message: "Success"
-                    })
+                if(err){
+                    throw err
                 } else {
-                    res.status(401).send({
-                        error: 401,
-                        message: "Username or password was incorrect"
-                    })
+                    if(!results[0]){
+                        res.status(401).send(
+                            {
+                                error: 401,
+                                message: "Username or password was incorrect."
+                            }
+                        )
+                        return;
+                    }
+                    const validPassword = await bcrypt.compare(body.password, results[0].password)
+                    
+                    if(validPassword){
+                        res.status(200).send({
+                            token: tokens.TokenModel.generateAccessToken({
+                                username: body.username,
+                                context: {
+                                    isBanned: results[0].isBanned,
+                                    isModerator: results[0].isModerator
+                                }
+                            }),
+                            message: "Success"
+                        })
+                    } else {
+                        res.status(401).send({
+                            error: 401,
+                            message: "Username or password was incorrect"
+                        })
+                    }
                 }
-            }
+            })
+            connection.release()
         })
     }
 })
 
 app.post("/posts", authenticateToken.authenticateToken, (req, res) => {
     const post = req.body
-    connection.query('SELECT * FROM user WHERE username = ?', [post.username], async function(err, results, fields){
-        if(err){
-            throw err
-        } else {
-            connection.query('INSERT INTO post VALUES (default, ?, ?, now(), ?, ?, default)', [post.subject, post.body, results[0].id, post.board], async function (err){
-                if(err){
-                    throw err
-                } else {
-                    res.status(201).send({
-                        message: "Created"
-                    })
-                }
-            })
-        }
+    pool.getConnection(function(err, connection){
+        connection.query('SELECT * FROM user WHERE username = ?', [post.username], async function(err, results, fields){
+            if(err){
+                throw err
+            } else {
+                connection.query('INSERT INTO post VALUES (default, ?, ?, now(), ?, ?, default)', [post.subject, post.body, results[0].id, post.board], async function (err){
+                    if(err){
+                        throw err
+                    } else {
+                        res.status(201).send({
+                            message: "Created"
+                        })
+                    }
+                })
+            }
+        })
+        connection.release()
     })
 })
 
 app.patch("/posts", authenticateToken.authenticateToken, (req, res) => {
-    const post = req.body
-    connection.query('UPDATE post SET isDeleted = 1 WHERE id = ?', [req.body.id], function(err){
-        if(err){
-            throw err
-        } else {
-            res.status(200).send({
-                message: "Deleted"
-            })
-        }
+    pool.getConnection(function(err, connection){
+        connection.query('UPDATE post SET isDeleted = 1 WHERE id = ?', [req.body.id], function(err){
+            if(err){
+                throw err
+            } else {
+                res.status(200).send({
+                    message: "Deleted"
+                })
+            }
+        })
+        connection.release()
     })
 })
 
