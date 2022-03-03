@@ -56,10 +56,11 @@ export default function GeneralBoard(){
                             return(
                             <>
                             <hr></hr>
+                            <div className = "user" >Posted by: {item.username}</div>
                                 <div className="subject">Subject: {item.subject}</div>
                                 <div className="text-header">Text:</div>
                                 <div className="body">{item.text}</div>
-                                {(hasToken && hasToken.context.isModerator) && <Button variant="danger" className="delete-btn" onClick={handleDelete(item.id)} >Delete Post</Button>}
+                                {(hasToken && hasToken.context.isModerator) ? <Button variant="danger" className="delete-btn" onClick={handleDelete(item.id)} >Delete Post</Button> : <div> </div> }
                             </>
                             )
                         } else return (<><hr></hr>[DELETED]</>)

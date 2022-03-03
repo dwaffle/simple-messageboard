@@ -53,7 +53,7 @@ app.get("/boards", (req, res) => {
 })
 
 app.get("/posts/:boardId", (req, res) => {
-    connection.query(`SELECT * FROM post WHERE board_id = ${req.params.boardId}`, function(err, results, fields){
+    connection.query(`SELECT p.id, subject, text, date, user_id, board_id, isDeleted, u.username FROM post p JOIN user u ON p.user_id = u.id WHERE board_id = ${req.params.boardId}`, function(err, results, fields){
         if(err){
             throw err
         } else {

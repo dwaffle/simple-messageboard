@@ -3,9 +3,10 @@ import {useState, useEffect} from 'react';
 import api from '../api'
 import { Form, Button, Row, Col } from "react-bootstrap";
 import jwt_decode from 'jwt-decode'
+import {useNavigate} from 'react-router-dom'
 
 export default function PostingForm(props = {}){
-
+    const navigate = useNavigate()
     //Get username from the JWT token
     const [token, setToken] = useState('')
     const [username, setUsername] = useState('')
@@ -32,6 +33,7 @@ export default function PostingForm(props = {}){
         } else {
             try {
                 api.posts.post(postRequest)
+                navigate(0);
             } catch {
                 alert("Please log in again")
             }
