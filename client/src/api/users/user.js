@@ -6,6 +6,10 @@ export default {
     },
 
     post: async(body) => {
-        return axios.post(`http://localhost:3001/user`, body)
+        return axios.post(`http://localhost:3001/user`, body, {
+            headers: {
+                Authorization: `Bearer ${window.localStorage.getItem('token')}`
+            }
+        })
     }
 }

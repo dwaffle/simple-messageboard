@@ -42,20 +42,18 @@ export default function PostingForm(props = {}){
     
     return(
         <> 
-            <Form>
-                <Form.Group className="posting-form">
+            <Form className="posting-form">
+                <Form.Group >
                     <Row>
-                        <Row>
                             Posting as {username}
-                        </Row>
                     </Row>                    
                     <Row>
                         <Form.Label>Subject:</Form.Label>
                         <Col>
-                            <Form.Control placeholder="Subject" onChange={(e) => setSubject(e.target.value)}></Form.Control>
+                            <textarea className="subject-form" placeholder="Subject" onChange={(e) => setSubject(e.target.value)}></textarea>
                             <Form.Label>Body</Form.Label>
                             <Col>
-                                <Form.Control placeholder="Main text" onChange={(e) => setBody(e.target.value)}></Form.Control>
+                                <textarea className="maintext-form" placeholder="Main text" onChange={(e) => setBody(e.target.value)}></textarea>
                             </Col>
                         </Col>
                     </Row>

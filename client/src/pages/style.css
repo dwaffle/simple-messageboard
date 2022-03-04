@@ -9,3 +9,40 @@
 .boarddesc{
     font-weight: 800;
 }
+
+.body{
+    font-size: large;
+}
+
+.deleted-box{
+    width: auto;
+    margin: auto;
+    text-align: center;
+}
+
+.post-wrap {
+    margin-left: 15px;
+}
+
+.btn-wrap {
+    margin-left: 15px;
+}
+
+.posting-form {
+    margin-left: 15px;
+}
+
+.subject-form{
+    width: 400px
+}
+
+.maintext-form {
+    width: 400px;
+    height: 100px;
+    word-wrap: break-word;
+    word-break: break-all;
+}
+.posting-form {
+    width: 400px;
+    height: 300px;
+}

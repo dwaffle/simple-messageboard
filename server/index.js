@@ -17,12 +17,6 @@ app.use((req, res, next) => {
 app.use(cors())
 app.use(bodyParser.json())
 var mysql = require('mysql2')
-// var connection = mysql.createConnection({
-//     host: process.env.WEBHOST,
-//     user: process.env.USER,
-//     password: process.env.PASSWORD,
-//     database: process.env.DATABASE
-// })
 var pool = mysql.createPool({
     connectionLimit: 10,
     host: process.env.WEBHOST,
@@ -47,6 +41,18 @@ app.get("/user", (req, res) => {
             }
         })
         connection.release()
+    })
+})
+
+app.post("/user", authenticateToken.authenticateToken, (req, res) => {
+    pool.getConnection(function(err, connection){
+        connection.query('UPDATE user SET isBanned = 1, isModerator = 0 WHERE username = ? ', [req.body.username], function(err, results, fields){
+            if(err){
+                throw err
+            } else {
+                res.status(200).send({message: "Banned"})
+            }
+        })
     })
 })
 
