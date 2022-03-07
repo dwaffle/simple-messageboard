@@ -2,25 +2,27 @@ import React from "react";
 import {useState, useEffect} from 'react';
 import api from '../api'
 import './style.css'
-import jwtDecode from "jwt-decode";
 import {Button, Row, Col} from 'react-bootstrap'
 import PostingForm from "../components/postForm";
+import jwtDecode from "jwt-decode";
+import { useNavigate } from "react-router-dom";
 
 export default function SergeantBoard(){
 
+    const navigate = useNavigate()
     const [posts, setPosts] = useState([{}])
+    const [hasToken, setToken] = useState('')
     
     useEffect(() => {
         api.posts.get(2).then(res => {
             //Alter the date to a human readable format.
-            
+            res.data.forEach((post) => {
+                post.date = post.date.split('T')[0]
+            })
             setPosts(res.data)
-            console.log(res.data)
 
         })
     }, [])
-
-    const [hasToken, setToken] = useState('')
 
     useEffect(() => {
         
@@ -32,10 +34,34 @@ export default function SergeantBoard(){
                 localStorage.clear();
                 return;
               }
+              
             setToken(decoded)
-            console.log(decoded)
         }
     }, [])
+
+         function handleDelete(idno){
+             return function deleter(){
+                 let id = {
+                     id: idno
+                 }
+                api.posts.patch(id);
+                navigate(0)
+            }
+            
+        }
+
+        function handleBan(user){
+            return function banner(){
+                let username = {
+                    username: user
+                }
+                if(user === hasToken.username){
+                    localStorage.clear()
+                    navigate('/boards')
+                }
+                api.user.post(username)
+            }
+        }
     
 
     return(
@@ -44,23 +70,28 @@ export default function SergeantBoard(){
             <h1 className="title">Sergeant Discussion</h1>
         </Row>
                         {posts && posts.map((item) => {
+                            if(item.isDeleted === 0){
                             return(
                             <>
-                            <Col>
-                                <div className="subject">Subject: {item.subject}</div>
-                            </Col>
-                            <Col>
-                                <div className="text-header">Text:</div>
-                                <div className="body">{item.text}</div>
-                            </Col>
-                            <div />
+                                <hr />
+                                <div className="post-wrap">
+                                    <div className = "user" >Posted by: {item.username} on {item.date} </div>
+                                        <div className="subject">Subject: {item.subject}</div>
+                                        <br />
+                                        <div className="body">{item.text}</div>
+                                        {(hasToken && hasToken.context.isModerator && hasToken.context.isBanned !== 1) ? <><Button variant="warning" className="delete-btn" onClick={handleDelete(item.id)} >Delete Post</Button> <Button className="ban-btn" variant="danger" onClick={handleBan(item.username)}>Ban User</Button></> : <div> </div> }
+                                    </div>
+                                <hr />
                             </>
                             )
-                        })}
-                <Col>
-                        {hasToken && <PostingForm props={{board: 2}} />}
+                        } else return (<><hr></hr><div className="deleted-box">[DELETED]</div></>)
+                    }
+                        )
+                    }
+
+              <Col>
+                        {(hasToken && (hasToken.context.isBanned !== 1)) ? <PostingForm className="posting-form" props={{board: 2}} /> : (!hasToken) ? <><Button href="/signup">Sign up</Button><div><Button href="/login">Login</Button></div></> : <div>You have been banned from this site.</div>}
               </Col>  
-                
         </>
     )
 }
