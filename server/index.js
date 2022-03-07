@@ -9,11 +9,11 @@ const authenticateToken = require('./middleware/authenticator')
 require('dotenv').config()
 
 
-
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*')
     next()
 })
+
 app.use(cors())
 app.use(bodyParser.json())
 var mysql = require('mysql2')
@@ -25,11 +25,6 @@ var pool = mysql.createPool({
     database: process.env.DATABASE
 })
 
-
-
-app.get("/api", (req, res) => {
-    res.json({message: "Hello from server!"})
-})
 
 app.get("/user", (req, res) => {
     pool.getConnection(function(err, connection){
