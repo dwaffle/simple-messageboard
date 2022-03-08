@@ -1,3 +1,4 @@
-[[redirects]] from = "/*" 
+[[redirects]] 
+from = "/*" 
 to = "/" 
 status = 200
