@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export default {
     post: async (body) => {
-        axios.post(`http://localhost:3001/login`, body).then((res) => {
+        axios.post(`https://git.heroku.com/messageboard-512/login`, body).then((res) => {
             try{
                 window.localStorage.setItem('token', res.data.token)
             } catch {

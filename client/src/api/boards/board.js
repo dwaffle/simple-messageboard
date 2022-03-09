@@ -3,6 +3,6 @@ import axios from 'axios'
 
 export default {
     get: async () => {
-        return axios.get(`http://localhost:3001/boards`)
+        return axios.get(`https://messageboard-512.herokuapp.com/boards`)
     }
 }
