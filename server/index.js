@@ -20,11 +20,12 @@ app.use(cors())
 app.use(bodyParser.json())
 var mysql = require('mysql2')
 var pool = mysql.createPool({
-    connectionLimit: 10,
+    connectionLimit: 0,
     host: process.env.WEBHOST,
     user: process.env.USER,
     password: process.env.PASSWORD,
-    database: process.env.DATABASE
+    database: process.env.DATABASE,
+    queueLimit: 0,
 })
 
 app.get("/test", (req, res) => {
