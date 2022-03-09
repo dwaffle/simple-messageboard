@@ -27,6 +27,10 @@ var pool = mysql.createPool({
     database: process.env.DATABASE
 })
 
+app.get("/test", (req, res) => {
+    res.send("Test successful")
+})
+
 
 app.get("/user", (req, res) => {
     pool.getConnection(function(err, connection){
