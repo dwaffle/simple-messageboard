@@ -2,11 +2,11 @@ import axios from 'axios'
 
 export default {
     get: async () => {
-        return axios.get(`https://messageboard-256.herokuapp.com/user`)
+        return axios.get(`http://localhost:3001/user`)
     },
 
     post: async(body) => {
-        return axios.post(`https://messageboard-256.herokuapp.com/user`, body, {
+        return axios.post(`http://localhost:3001/user`, body, {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem('token')}`
             }

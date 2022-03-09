@@ -3,11 +3,11 @@ import axios from 'axios'
 
 export default {
     get: async (boardId) => {
-        return axios.get(`https://messageboard-256.herokuapp.com/posts/${boardId}`)
+        return axios.get(`http://localhost:3001/posts/${boardId}`)
     },
     
     post: async (post) => {
-        axios.post(`https://messageboard-256.herokuapp.com/posts/`, post, {
+        axios.post(`http://localhost:3001/posts/`, post, {
                 headers: {
                     Authorization: `Bearer ${window.localStorage.getItem('token')}`
             }
@@ -15,7 +15,7 @@ export default {
     },
 
     patch: async (post) => {
-        axios.patch(`https://messageboard-256.herokuapp.com/posts/`, post, {
+        axios.patch(`http://localhost:3001/posts/`, post, {
             headers: {
                 Authorization: `Bearer ${window.localStorage.getItem('token')}`
         }
