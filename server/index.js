@@ -25,7 +25,7 @@ var pool = mysql.createPool({
     user: process.env.USER,
     password: process.env.PASSWORD,
     database: process.env.DATABASE,
-    queueLimit: 0,
+    queueLimit: 0
 })
 
 app.get("/test", (req, res) => {
