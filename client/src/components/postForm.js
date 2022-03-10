@@ -48,7 +48,7 @@ export default function PostingForm(props = {}){
                     <Row>
                         <Form.Label>Subject:</Form.Label>
                         <Col>
-                            <textarea className="subject-form" placeholder="Subject" onChange={(e) => setSubject(e.target.value)}></textarea>
+                            <textarea maxLength={44} className="subject-form" placeholder="Subject" onChange={(e) => setSubject(e.target.value)}></textarea>
                             <Form.Label>Body</Form.Label>
                             <Col>
                                 <textarea className="maintext-form" placeholder="Main text" onChange={(e) => setBody(e.target.value)}></textarea>
