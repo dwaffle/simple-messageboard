@@ -34,7 +34,12 @@ app.get("/user", (req, res) => {
             if(err){
                 res.status(400).send(err)
             } else {
-                res.status(200).send(results);
+                let user = {
+                    username: results.username,
+                    isBanned: results.isBanned,
+                    isModerator: results.isModerator
+                }
+                res.status(200).send(user);
             }
         })
         connection.release()
