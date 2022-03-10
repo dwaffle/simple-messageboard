@@ -70,7 +70,7 @@ export default function SergeantBoard(){
         <> 
             {hasToken && <LogoutButton />} <BackButton /> 
         <Row>
-            <h1 className="title">Sergeant Discussion</h1> <BackButton /> {hasToken && <LogoutButton />}
+            <h1 className="title">Sergeant Discussion</h1>
         </Row>
                         {posts && posts.map((item) => {
                             if(item.isDeleted === 0){
