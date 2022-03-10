@@ -32,9 +32,6 @@ app.get("/test", (req, res) => {
     res.send("Test successful")
 })
 
-app.get("/", (req, res) => {
-    res.send("You've hit the basic route.")
-})
 
 
 app.get("/user", (req, res) => {
