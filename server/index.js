@@ -71,7 +71,6 @@ app.get("/boards", (req, res) => {
         })
         connection.release()
     })
-    res.status(666).send({message: "It didn't work"})
 })
 
 app.get("/posts/:boardId", (req, res) => {
