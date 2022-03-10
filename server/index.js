@@ -32,12 +32,16 @@ app.get("/test", (req, res) => {
     res.send("Test successful")
 })
 
+app.get("/", (req, res) => {
+    res.send("You've hit the basic route.")
+})
+
 
 app.get("/user", (req, res) => {
     pool.getConnection(function(err, connection){
         connection.query('SELECT * FROM user', function(err, results, fields){
             if(err){
-                res.status.send(500)
+                res.status.send(err)
             } else {
                 res.status(200).send(results);
             }
@@ -50,7 +54,7 @@ app.post("/user", authenticateToken.authenticateToken, (req, res) => {
     pool.getConnection(function(err, connection){
         connection.query('UPDATE user SET isBanned = 1, isModerator = 0 WHERE username = ? ', [req.body.username], function(err, results, fields){
             if(err){
-                res.status.send(500)
+                res.status(400).send(err)
             } else {
                 res.status(200).send({message: "Banned"})
             }
@@ -62,7 +66,7 @@ app.get("/boards", (req, res) => {
     pool.getConnection(function(err, connection){
         connection.query('SELECT * FROM board', function(err, results, fields){
             if(err){
-                res.status.send(500)
+                res.status(400).send(err)
             } else {
                 console.log(results);
                 res.status(200).send(results)
@@ -76,7 +80,7 @@ app.get("/posts/:boardId", (req, res) => {
     pool.getConnection(function(err, connection){
         connection.query(`SELECT p.id, subject, text, date, user_id, board_id, isDeleted, u.username FROM post p JOIN user u ON p.user_id = u.id WHERE board_id = ${req.params.boardId}`, function(err, results, fields){
             if(err){
-                res.status.send(500)
+                res.status(400).send(err)
             } else {
                 res.status(200).send(results)
             }
@@ -97,7 +101,7 @@ app.post("/signup", async (req, res) => {
             pool.getConnection(function(err, connection){
                 connection.query(`INSERT INTO user VALUES (default, ?, ?, 0, 0)`, [body.username, password], function(err, results, fields){
                     if(err){
-                        res.status.send(500)
+                        res.status(400).send(err)
                     } else {
                         res.status(200).send()
                     }
@@ -119,7 +123,7 @@ app.post("/login", (req, res) => {
             connection.query(`SELECT * FROM user WHERE username = ?`, [body.username], async function(err, results, fields){
                 
                 if(err){
-                    res.status.send(500)
+                    res.status(400).send(err)
                 } else {
                     if(!results[0]){
                         res.status(401).send(
@@ -165,7 +169,7 @@ app.post("/posts", authenticateToken.authenticateToken, (req, res) => {
             } else {
                 connection.query('INSERT INTO post VALUES (default, ?, ?, now(), ?, ?, default)', [post.subject, post.body, results[0].id, post.board], async function (err){
                     if(err){
-                        res.status.send(500)
+                        res.status(400).send(err)
                     } else {
                         res.status(201).send({
                             message: "Created"
@@ -182,7 +186,7 @@ app.patch("/posts", authenticateToken.authenticateToken, (req, res) => {
     pool.getConnection(function(err, connection){
         connection.query('UPDATE post SET isDeleted = 1 WHERE id = ?', [req.body.id], function(err){
             if(err){
-                res.status.send(500)
+                res.status(400).send(err)
             } else {
                 res.status(200).send({
                     message: "Deleted"
