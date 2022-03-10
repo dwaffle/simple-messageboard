@@ -38,7 +38,7 @@ app.get("/user", (req, res) => {
     pool.getConnection(function(err, connection){
         connection.query('SELECT * FROM user', function(err, results, fields){
             if(err){
-                res.status.send(err)
+                res.status(400).send(err)
             } else {
                 res.status(200).send(results);
             }
