@@ -6,6 +6,8 @@ import {Button, Row, Col} from 'react-bootstrap'
 import PostingForm from "../components/postForm";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../components/backToBoards";
+import LogoutButton from "../components/logoutButton";
 
 export default function SergeantBoard(){
 
@@ -66,8 +68,9 @@ export default function SergeantBoard(){
 
     return(
         <> 
+            {hasToken && <LogoutButton />} <BackButton /> 
         <Row>
-            <h1 className="title">Sergeant Discussion</h1>
+            <h1 className="title">Sergeant Discussion</h1> <BackButton /> {hasToken && <LogoutButton />}
         </Row>
                         {posts && posts.map((item) => {
                             if(item.isDeleted === 0){

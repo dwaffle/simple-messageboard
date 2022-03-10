@@ -2,11 +2,14 @@ import React from "react";
 import {useState, useEffect} from 'react';
 import api from '../api'
 import './style.css'
+import jwtDecode from "jwt-decode";
 import {Button} from 'react-bootstrap'
+import LogoutButton from "../components/logoutButton";
 
 export default function ShowBoards(){
 
     const [boards, setBoards] = useState([{}])
+    const [hasToken, setToken] = useState('')
     
     useEffect(() => {
         api.board.get().then(res => {
@@ -14,12 +17,27 @@ export default function ShowBoards(){
         })
     }, [])
 
+    useEffect(() => {
+        
+        const token = window.localStorage.getItem('token')
+        if(token){
+            
+            const decoded = jwtDecode(token)
+            if (Date.now() >= decoded.exp * 1000) {
+                localStorage.clear();
+                return;
+              }
+              
+            setToken(decoded)
+        }
+    }, [])
 
     
 
     return(
         <> 
-            <h1 className="title">Boards</h1>
+        {hasToken && <LogoutButton />}
+            <h1 className="title">Boards</h1> 
                 <table>
                     <tbody>
                     <tr>

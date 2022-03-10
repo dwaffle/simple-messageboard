@@ -46,3 +46,18 @@
     width: 400px;
     height: 300px;
 }
+
+.logout-btn {
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 10px;
+    float: right;
+    display: inline;
+  }
+
+  .back-btn {
+      margin-top: 10px;
+      margin-right: 5px;
+      float: right;
+      display: inline;
+  }

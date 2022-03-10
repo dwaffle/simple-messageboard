@@ -6,6 +6,8 @@ import {Button, Row, Col} from 'react-bootstrap'
 import PostingForm from "../components/postForm";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
+import BackButton from "../components/backToBoards";
+import LogoutButton from "../components/logoutButton";
 
 export default function GeneralBoard(){
 
@@ -66,8 +68,9 @@ export default function GeneralBoard(){
 
     return(
         <> 
+            {hasToken && <LogoutButton />} <BackButton /> 
         <Row>
-            <h1 className="title">General Discussion</h1>
+            <h1 className="title">General Discussion</h1> 
         </Row>
                         {posts && posts.map((item) => {
                             if(item.isDeleted === 0){
