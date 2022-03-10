@@ -5,7 +5,6 @@ import './style.css'
 import {Button, Row, Col} from 'react-bootstrap'
 import PostingForm from "../components/postForm";
 import jwtDecode from "jwt-decode";
-import Post from "../components/post";
 import { useNavigate } from "react-router-dom";
 
 export default function GeneralBoard(){

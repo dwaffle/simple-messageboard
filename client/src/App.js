@@ -1,11 +1,10 @@
-import React, {useEffect, useState} from "react"
+import React from "react"
 import {BrowserRouter, Route, Routes} from 'react-router-dom'
 import LoginPage from './pages/login'
 import ShowBoards from './pages/boards'
 import GeneralBoard from './pages/general'
 import SergeantBoard from "./pages/sergeant"
 import SignupPage from "./pages/signup"
-import logo from './logo.svg';
 import './App.css';
 
 function App() {

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-anonymous-default-export */
 import board from './boards/board'
 import user from './users/user'
 import posts from './posts/posts'

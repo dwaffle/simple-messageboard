@@ -8,7 +8,6 @@ import {useNavigate} from 'react-router-dom'
 export default function PostingForm(props = {}){
     const navigate = useNavigate()
     //Get username from the JWT token
-    const [token, setToken] = useState('')
     const [username, setUsername] = useState('')
     const [subject, setSubject] = useState('')
     const [body, setBody] = useState('')
@@ -16,7 +15,6 @@ export default function PostingForm(props = {}){
     useEffect(() => {
         const token = window.localStorage.getItem('token')
         const decoded = jwt_decode(token)
-        setToken(decoded)
         setUsername(decoded.username)
     }, [])
     //Submission handler function.
