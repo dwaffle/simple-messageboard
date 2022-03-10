@@ -4,6 +4,6 @@ import axios from 'axios'
 export default {
 
     post: async(body) => {
-        return axios.post(`https://git.heroku.com/messageboard-512/signup`, body)
+        return axios.post(`https://messageboard-512.herokuapp.com/signup`, body)
     }
 }
