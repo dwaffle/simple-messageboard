@@ -16,7 +16,7 @@ export function SignupForm() {
     api.signup.post(signupRequest).then((res) => {
       console.log(res)
     });
-    navigate('/boards')
+    navigate('/login')
   }
 
   return (

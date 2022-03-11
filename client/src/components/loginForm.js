@@ -51,12 +51,7 @@ export function LoginForm() {
             />
           </Form.Group>
 
-          <div className="form-group">
-                    <div className="custom-control custom-checkbox">
-                        <input type="checkbox" className="custom-control-input" id="vehicle1" />
-                        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                    </div>
-          </div>
+
           <Button
             className="btn btn-primary btn-block"
             variant="primary"
