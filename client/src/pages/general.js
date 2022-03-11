@@ -36,7 +36,7 @@ export default function GeneralBoard(){
                 localStorage.clear();
                 return;
               }
-              
+              console.log(decoded)
             setToken(decoded)
         }
     }, [])
@@ -82,7 +82,7 @@ export default function GeneralBoard(){
                                     <div className="subject">Subject: {item.subject}</div>
                                     <br />
                                     <div className="body">{item.text}</div>
-                                    {(hasToken && hasToken.context.isModerator && hasToken.context.isBanned !== 1) ? <><Button variant="warning" className="delete-btn" onClick={handleDelete(item.id)} >Delete Post</Button> <Button className="ban-btn" variant="danger" onClick={handleBan(item.username)}>Ban User</Button></> : <div> </div> }
+                                    {(hasToken && (hasToken.context.isModerator === "1") && hasToken.context.isBanned !== "1") ? <><Button variant="warning" className="delete-btn" onClick={handleDelete(item.id)} >Delete Post</Button> <Button className="ban-btn" variant="danger" onClick={handleBan(item.username)}>Ban User</Button></> : <div> </div> }
                                 </div>
                                 <hr />
                             </>
