@@ -87,13 +87,13 @@ export default function SergeantBoard(){
                                 <hr />
                             </>
                             )
-                        } else return (<><hr></hr><div className="deleted-box">[DELETED]</div></>)
+                        } else return (<><hr></hr><div className="deleted-box">[DELETED]<hr /></div></>)
                     }
                         )
                     }
 
               <Col>
-                        {(hasToken && (hasToken.context.isBanned !== 1)) ? <PostingForm className="posting-form" props={{board: 2}} /> : (!hasToken) ? <><Button href="/signup">Sign up</Button><div><Button href="/login">Login</Button></div></> : <div>You have been banned from this site.</div>}
+                        {(hasToken && (hasToken.context.isBanned !== 1)) ? <PostingForm className="posting-form" props={{board: 2}} /> : (!hasToken) ? <><Button href="/signup" className="signup-btn">Sign up</Button><div><Button href="/login" className="login-btn">Login</Button></div></> : <div>You have been banned from this site.</div>}
               </Col>  
         </>
     )

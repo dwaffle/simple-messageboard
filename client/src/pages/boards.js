@@ -46,6 +46,7 @@ export default function ShowBoards(){
                         </th>
                     </tr>
                         {boards && boards.map((item) => {
+                            if(item.name){
                             return(
                             <tr>
                                 <Button className="boardlink" href={item.link}>
@@ -54,11 +55,17 @@ export default function ShowBoards(){
                                 <td className="boarddesc">{item.description}</td>
                             </tr>
                             )
-                        })}
+                        } else {
+                            return (
+                                <div className="loading-txt">Loading...</div>
+                            )
+                        }
+                    }
+                        )}
                     
                     </tbody>
                 </table>
-                
+                {!hasToken && <><Button className="signup-btn" href="/signup">Sign up</Button><div><Button href="/login" className="login-btn">Login</Button></div></>}
         </>
     )
 }

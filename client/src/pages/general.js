@@ -84,15 +84,16 @@ export default function GeneralBoard(){
                                     <div className="body">{item.text}</div>
                                     {(hasToken && hasToken.context.isModerator && hasToken.context.isBanned !== 1) ? <><Button variant="warning" className="delete-btn" onClick={handleDelete(item.id)} >Delete Post</Button> <Button className="ban-btn" variant="danger" onClick={handleBan(item.username)}>Ban User</Button></> : <div> </div> }
                                 </div>
+                                <hr />
                             </>
                             )
-                        } else return (<><hr></hr><div className="deleted-box">[DELETED]</div></>)
+                        } else return (<><hr></hr><div className="deleted-box">[DELETED] <hr /></div></>)
                     }
                         )
                     }
 
               <Col>
-                        {(hasToken && (hasToken.context.isBanned !== 1)) ? <PostingForm className="posting-form" props={{board: 1}} /> : (!hasToken) ? <><Button href="/signup">Sign up</Button><div><Button href="/login">Login</Button></div></> : <div>You have been banned from this site.</div>}
+                        {(hasToken && (hasToken.context.isBanned !== 1)) ? <PostingForm className="posting-form" props={{board: 1}} /> : (!hasToken) ? <><Button href="/signup" className="signup-btn">Sign up</Button><div><Button href="/login" className="login-btn">Login</Button></div></> : <div>You have been banned from this site.</div>}
               </Col>  
         </>
     )

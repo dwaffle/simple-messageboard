@@ -61,3 +61,19 @@
       float: right;
       display: inline;
   }
+
+  .loading-txt {
+      font-size: large;
+      font-weight: 800;
+  }
+
+  .signup-btn {
+      margin-bottom: 5px;
+      margin-top: 5px;
+      margin-left: 10px;
+  }
+
+  .login-btn {
+      margin-top: 5px;
+      margin-left: 10px;
+  }
