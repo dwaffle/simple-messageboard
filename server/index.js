@@ -9,7 +9,12 @@ const tokens = require('./models/token')
 const authenticateToken = require('./middleware/authenticator')
 require('dotenv').config()
 
-app.use(cors({origin: "https://competent-snyder-4c9a37.netlify.app"}))
+app.use(cors())
+app.use(function(req, res, next){
+    res.header("Access-Control-Allow-Origin", req.headers.origin)
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
+    next()
+})
 app.use(bodyParser.json())
 var mysql = require('mysql2')
 const { application } = require('express')
