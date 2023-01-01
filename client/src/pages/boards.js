@@ -30,7 +30,7 @@ export default function ShowBoards(){
               
             setToken(decoded)
         }
-    }, [])
+    }, [hasToken])
 
     
 

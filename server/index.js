@@ -9,10 +9,10 @@ const tokens = require('./models/token')
 const authenticateToken = require('./middleware/authenticator')
 require('dotenv').config()
 
-
-app.use(cors())
+app.use(cors({origin: ["*"]}))
 app.use(bodyParser.json())
 var mysql = require('mysql2')
+const { application } = require('express')
 var pool = mysql.createPool({
     connectionLimit: 0,
     host: process.env.WEBHOST,
@@ -25,7 +25,6 @@ var pool = mysql.createPool({
 app.get("/test", (req, res) => {
     res.send("Test successful")
 })
-
 
 
 app.get("/user", (req, res) => {
@@ -64,7 +63,6 @@ app.get("/boards", (req, res) => {
             if(err){
                 res.status(400).send(err)
             } else {
-                console.log(results);
                 res.status(200).send(results)
             }
         })

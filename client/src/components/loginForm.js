@@ -14,12 +14,13 @@ export function LoginForm() {
     e.preventDefault();
     const loginRequest = { username: username, password: password };
     api.login.post(loginRequest).then((res) => {
-      console.log(res)
-    });
-    navigate('/boards')
+      console.log(res);
+    })
+    navigate("/boards")
   }
 
   return (
+    
     <>
    <div className = "backGround">
 
