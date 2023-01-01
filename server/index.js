@@ -9,7 +9,7 @@ const tokens = require('./models/token')
 const authenticateToken = require('./middleware/authenticator')
 require('dotenv').config()
 
-app.use(cors({origin: ["*"]}))
+app.use(cors({origin: "https://competent-snyder-4c9a37.netlify.app"}))
 app.use(bodyParser.json())
 var mysql = require('mysql2')
 const { application } = require('express')
